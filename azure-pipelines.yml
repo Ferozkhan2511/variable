@@ -1,0 +1,45 @@
+trigger:
+- none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - name: NewAppName
+    value: 'azureapp'
+  - name: NewPort
+    value: '9090'
+  - name: PropertiesFilePath
+    value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
+
+jobs:
+- job: BuildAndReplaceProperties
+  steps:
+  - checkout: self
+
+  - task: Maven@4
+    inputs:
+      mavenPomFile: 'pom.xml'
+      options: '-DskipTests'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.17'
+      mavenVersionOption: 'Default'
+      mavenAuthenticateFeed: false
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: false
+
+  - script: |
+      # Replace values in application.properties
+      sed -i 's/^spring.application.name=.*/spring.application.name=$(NewAppName)/' $(PropertiesFilePath)
+      sed -i 's/^server.port=.*/server.port=$(NewPort)/' $(PropertiesFilePath)
+    displayName: 'Replace values in application.properties'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
+      ArtifactName: 'my-artifact'
+      publishLocation: 'Container'
+    displayName: 'Publish artifact'
+
