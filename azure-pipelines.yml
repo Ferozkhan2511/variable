@@ -17,7 +17,7 @@ jobs:
   steps:
   - checkout: self
 
- - task: Maven@4
+  - task: Maven@4
     inputs:
       mavenPomFile: 'pom.xml'
       options: '-DskipTests'
@@ -37,8 +37,9 @@ jobs:
     displayName: 'Replace values in application.properties'
 
   - task: PublishBuildArtifacts@1
-  inputs:
-  PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
-  ArtifactName: 'my-artifact'
-  publishLocation: 'Container'
-  displayName: 'Publish artifact'
+    inputs:
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
+      ArtifactName: 'my-artifact'
+      publishLocation: 'Container'
+    displayName: 'Publish artifact'
+
