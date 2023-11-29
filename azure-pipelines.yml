@@ -30,11 +30,28 @@ jobs:
       effectivePomSkip: false
       sonarQubeRunAnalysis: false
 
+
   - script: |
+      # Debug: Print current directory and contents of the directory
+      echo "Current Directory: $(pwd)"
+      echo "Contents of $(PropertiesFilePath):"
+      cat $(PropertiesFilePath)
+
       # Replace values in application.properties
-      sed -i 's/^spring.application.name=.*/spring.application.name=$(NewAppName)/' $(PropertiesFilePath)
-      sed -i 's/^server.port=.*/server.port=$(NewPort)/' $(PropertiesFilePath)
+      sed -i 's/^spring.application.name=.*$/spring.application.name=$(NewAppName)/' $(PropertiesFilePath)
+      sed -i 's/^server.port=.*$/server.port=$(NewPort)/' $(PropertiesFilePath)
+
+      # Debug: Print the modified contents of the file
+      echo "Modified Contents of $(PropertiesFilePath):"
+      cat $(PropertiesFilePath)
     displayName: 'Replace values in application.properties'
+
+
+  # - script: |
+  #     # Replace values in application.properties
+  #     sed -i 's/^spring.application.name=.*/spring.application.name=$(NewAppName)/' $(PropertiesFilePath)
+  #     sed -i 's/^server.port=.*/server.port=$(NewPort)/' $(PropertiesFilePath)
+  #   displayName: 'Replace values in application.properties'
 
   - task: PublishBuildArtifacts@1
     inputs:
