@@ -17,18 +17,6 @@ jobs:
   steps:
   - checkout: self
 
-  - task: Maven@4
-    inputs:
-      mavenPomFile: 'pom.xml'
-      options: '-DskipTests'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.17'
-      mavenVersionOption: 'Default'
-      mavenAuthenticateFeed: false
-      effectivePomSkip: false
-      sonarQubeRunAnalysis: false
 
 
   - script: |
@@ -53,6 +41,18 @@ jobs:
   #     sed -i 's/^server.port=.*/server.port=$(NewPort)/' $(PropertiesFilePath)
   #   displayName: 'Replace values in application.properties'
 
+  - task: Maven@4
+    inputs:
+      mavenPomFile: 'pom.xml'
+      options: '-DskipTests'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.17'
+      mavenVersionOption: 'Default'
+      mavenAuthenticateFeed: false
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: false
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
