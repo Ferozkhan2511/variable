@@ -27,5 +27,11 @@ jobs:
       sed -i 's/^server.port=.*/server.port=$(NewPort)/' $(PropertiesFilePath)
     displayName: 'Replace values in application.properties'
 
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/JavaApp.zip'
+      artifactName: 'App'
+      publishLocation: 'container'
+    displayName: 'Publish Artifact'
 
   # Add additional steps as needed for your deployment or other tasks
