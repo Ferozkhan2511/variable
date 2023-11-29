@@ -26,10 +26,11 @@ jobs:
       sed -i 's/^spring.application.name=.*/spring.application.name=$(NewAppName)/' $(PropertiesFilePath)
       sed -i 's/^server.port=.*/server.port=$(NewPort)/' $(PropertiesFilePath)
     displayName: 'Replace values in application.properties'
+
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)/target'
-      ArtifactName: 'drop'
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
+      ArtifactName: 'my-artifact'
       publishLocation: 'Container'
 
   # Add additional steps as needed for your deployment or other tasks
