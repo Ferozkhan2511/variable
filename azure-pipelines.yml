@@ -13,26 +13,25 @@ variables:
     value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
 
 jobs:
-- job: ReplaceProperties
+- job: BuildAndReplaceProperties
   steps:
   - checkout: self
 
-  - script: |
-      # Debugging: List contents of the working directory
-      ls -R $(System.DefaultWorkingDirectory)
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'clean package'
+    displayName: 'Build Spring Boot application'
 
+  - script: |
       # Replace values in application.properties
       sed -i 's/^spring.application.name=.*/spring.application.name=$(NewAppName)/' $(PropertiesFilePath)
       sed -i 's/^server.port=.*/server.port=$(NewPort)/' $(PropertiesFilePath)
     displayName: 'Replace values in application.properties'
-
-  - script: |
-      # Debugging: List contents of the target directory
-      ls -R $(System.DefaultWorkingDirectory)/target
-    displayName: 'List contents of the target directory'
 
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
       ArtifactName: 'my-artifact'
       publishLocation: 'Container'
+    displayName: 'Publish artifact'
