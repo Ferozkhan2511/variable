@@ -15,7 +15,7 @@ variables:
   - name: NewPort
     value: '9090'
   - name: PropertiesFilePath
-    value: '$(System.DefaultWorkingDirectory)/variable/src/main/resources/application.properties'
+    value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
 
 jobs:
 - job: ReplaceProperties
