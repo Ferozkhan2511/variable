@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - name: NewAppName
+    value: 'azureapp'
+  - name: NewPort
+    value: '9090'
+
+jobs:
+- job: ReplaceProperties
+  steps:
+  - checkout: self
+
+  - script: |
+      sed -i 's/^spring.application.name=.*/spring.application.name=$(NewAppName)/' variable/src/main/resources/application.properties
+      sed -i 's/^server.port=.*/server.port=$(NewPort)/' variable/src/main/resources/application.properties
+    displayName: 'Replace values in application.properties'
+
+  # Add additional steps as needed for your deployment or other tasks
