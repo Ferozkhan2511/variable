@@ -29,7 +29,7 @@ jobs:
 
   - task: PublishBuildArtifacts@1
     inputs:
-      # pathtoPublish: '$(Build.ArtifactStagingDirectory)/JavaApp.zip'
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/target'
       artifactName: 'App'
       publishLocation: 'container'
     displayName: 'Publish Artifact'
