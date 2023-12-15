@@ -10,7 +10,7 @@ COPY . /app
 # Set environment variables
 ENV AppName=${AppName}
 ENV PortNumber=${PortNumber}
-ENV dbc:mysql=${dbc:mysql}
+ENV dbc:mysql=${mysqlurl}
 ENV username=${username}
 ENV password=${password}
 
