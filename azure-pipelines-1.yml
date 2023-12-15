@@ -20,7 +20,7 @@ jobs:
   # Fetch values from Azure Key Vault
   - task: AzureKeyVault@2
     inputs:
-      azureSubscription: 'Keyvault'
+      azureSubscription: 'Az'
       KeyVaultName: 'variablecheck'
       SecretsFilter: '*'
       RunAsPreJob: false
