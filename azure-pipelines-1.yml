@@ -1,25 +1,61 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+- none
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  - name: AppName
+    value: '' # Leave it empty for now, we'll fetch it from Key Vault
+  - name: PortNumber
+    value: '' # Leave it empty for now, we'll fetch it from Key Vault
+  - name: PropertiesFilePath
+    value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+jobs:
+- job: BuildAndReplaceProperties
+  steps:
+  - checkout: self
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'docker'
-    command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
+  # Fetch values from Azure Key Vault
+  - task: AzureKeyVault@2
+    inputs:
+      azureSubscription: 'Keyvault' # This should be the service connection name, not 'Keyvault'
+      KeyVaultName: 'variablecheck'
+      SecretsFilter: '*'
+      RunAsPreJob: false
+
+  - script: |
+      # Debug: Print current directory and contents of the directory
+      echo "Current Directory: $(pwd)"
+      echo "Contents of $(PropertiesFilePath):"
+      cat $(PropertiesFilePath)
+
+      # Replace values in application.properties
+      sed -i "s/^spring.application.name=.*$/spring.application.name=$(AppName)/" $(PropertiesFilePath)
+      sed -i "s/^server.port=.*$/server.port=$(PortNumber)/" $(PropertiesFilePath)
+
+      # Debug: Print the modified contents of the file
+      echo "Modified Contents of $(PropertiesFilePath):"
+      cat $(PropertiesFilePath)
+    displayName: 'Replace values in application.properties'
+
+  - task: Maven@4
+    inputs:
+      mavenPomFile: 'pom.xml'
+      options: '-DskipTests'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.17'
+      mavenVersionOption: 'Default'
+      mavenAuthenticateFeed: false
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: false
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
+      ArtifactName: 'my-artifact'
+      publishLocation: 'Container'
+    displayName: 'Publish artifact'
