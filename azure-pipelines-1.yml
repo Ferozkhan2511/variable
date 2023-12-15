@@ -20,7 +20,7 @@ jobs:
   # Fetch values from Azure Key Vault
   - task: AzureKeyVault@2
     inputs:
-      azureSubscription: 'Keyvault' # This should be the service connection name, not 'Keyvault'
+      azureSubscription: 'Keyvault'
       KeyVaultName: 'variablecheck'
       SecretsFilter: '*'
       RunAsPreJob: false
