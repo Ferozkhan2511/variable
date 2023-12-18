@@ -31,9 +31,9 @@ jobs:
       echo "Contents of $(PropertiesFilePath):"
       cat "$(PropertiesFilePath)"
 
-      # Debug: Print environment variables
-      echo "AppName: $AppName"
-      echo "PortNumber: $PortNumber"
+       # Debug: Print environment variables
+      echo "AppName: $AZURE_KEYVAULT_SECRET_AppName"
+      echo "PortNumber: $AZURE_KEYVAULT_SECRET_PortNumber"
 
       # Replace values in application.properties using environment variables
       sed -i "s/^spring.application.name=.*$/spring.application.name=$AppName/" "$(PropertiesFilePath)"
