@@ -5,12 +5,15 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+  - group: keyvault  # Replace with your variable group name
+
+# variables:
 #   - name: AppName
 #     value: 'varapp' # Leave it empty for now, we'll fetch it from Key Vault
 #   - name: PortNumber
 #     value: '0002' # Leave it empty for now, we'll fetch it from Key Vault
-  - name: PropertiesFilePath
-    value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
+#   - name: PropertiesFilePath
+#     value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
 
 jobs:
 - job: BuildAndReplaceProperties
@@ -26,7 +29,8 @@ jobs:
       RunAsPreJob: false
 
   
-  - powershell: |
-      Write-Host "APPNAME: $env:AZURE_KEYVAULT_SECRET_APPNAME"
-      Write-Host "PortNumber: $env:AZURE_KEYVAULT_SECRET_PORTNUMBER"
-    displayName: 'Display Key Vault Values'
+  # Fetch values from Azure Key Vault and set environment variables
+  - script: |
+      echo "APPNAME: $(AppName)"
+      echo "PortNumber: $(PortNumber)"
+    displayName: 'Display Variable Group Values'
