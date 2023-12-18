@@ -4,6 +4,10 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  - name: PropertiesFilePath
+    value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
+
 jobs:
 - job: DisplayKeyVaultValues
   steps:
