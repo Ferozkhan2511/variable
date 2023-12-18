@@ -30,8 +30,10 @@ jobs:
 
   
   - script: |
-      echo "APPNAME: $(AppName)"
-      echo "PortNumber: $(PortNumber)"
-      echo "Original APPNAME: $env:APPNAME"
-      echo "Original PortNumber: $env:PortNumber"
+      # Debug: Print environment variables
+      env
+      echo "APPNAME: $AZURE_KEYVAULT_SECRET_AppName"
+      echo "PortNumber: $AZURE_KEYVAULT_SECRET_PortNumber"
+      echo "Original APPNAME: $env:AZURE_KEYVAULT_SECRET_AppName"
+      echo "Original PortNumber: $env:AZURE_KEYVAULT_SECRET_PortNumber"
     displayName: 'Display Variable Group Values'
