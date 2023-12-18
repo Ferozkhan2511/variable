@@ -31,6 +31,6 @@ jobs:
   
   - script: |
       # Display the values directly from Azure Key Vault secrets
-      echo "APPNAME: $(AZURE_KEYVAULT_SECRET_APPNAMEE)"
-      echo "PortNumber: $(AZURE_KEYVAULT_SECRET_PORTNUMBERR)"
+      echo "APPNAME: $(AZURE_KEYVAULT_SECRET_AppName)"
+      echo "PortNumber: $(AZURE_KEYVAULT_SECRET_PortNumber)"
     displayName: 'Display Key Vault Values'
