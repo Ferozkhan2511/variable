@@ -29,17 +29,22 @@ jobs:
       # Debug: Print current directory and contents of the directory
       echo "Current Directory: $(pwd)"
       echo "Contents of $(PropertiesFilePath):"
-      cat $(PropertiesFilePath)
-     
+      cat "$(PropertiesFilePath)"
 
-      # Replace values in application.properties
-      sed -i "s/^spring.application.name=.*$/spring.application.name=$AppName/" $(PropertiesFilePath)
-      sed -i "s/^server.port=.*$/server.port=$PortNumber/" $(PropertiesFilePath)
+      # Debug: Print environment variables
+      echo "AppName: $AppName"
+      echo "PortNumber: $PortNumber"
+
+      # Replace values in application.properties using environment variables
+      sed -i "s/^spring.application.name=.*$/spring.application.name=$AppName/" "$(PropertiesFilePath)"
+      sed -i "s/^server.port=.*$/server.port=$PortNumber/" "$(PropertiesFilePath)"
 
       # Debug: Print the modified contents of the file
       echo "Modified Contents of $(PropertiesFilePath):"
-      cat $(PropertiesFilePath)
+      cat "$(PropertiesFilePath)"
     displayName: 'Replace values in application.properties'
+    env:
+      PropertiesFilePath: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
 
   - task: Maven@4
     inputs:
