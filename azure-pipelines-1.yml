@@ -30,9 +30,7 @@ jobs:
       echo "Current Directory: $(pwd)"
       echo "Contents of $(PropertiesFilePath):"
       cat $(PropertiesFilePath)
-       # Export environment variables
-      export AppName=$AppName
-      export PortNumber=$PortNumber
+     
 
       # Replace values in application.properties
       sed -i "s/^spring.application.name=.*$/spring.application.name=${AppName}/" $(PropertiesFilePath)
