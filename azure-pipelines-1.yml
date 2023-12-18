@@ -26,8 +26,7 @@ jobs:
       RunAsPreJob: false
 
   
-  - script: |
-      # Debug: Print environment variables
-      echo "APPNAMEE: $AZURE_KEYVAULT_SECRET_APPNAMEE"
-      echo "PORTNUMBER: $AZURE_KEYVAULT_SECRET_PORTNUMBERR"
+  - powershell: |
+      Write-Host "APPNAME: $env:AZURE_KEYVAULT_SECRET_APPNAME"
+      Write-Host "PortNumber: $env:AZURE_KEYVAULT_SECRET_PORTNUMBER"
     displayName: 'Display Key Vault Values'
