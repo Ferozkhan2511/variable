@@ -22,4 +22,17 @@ jobs:
         echo $(PORTNUMBERR) > check.txt
     displayName: 'Display Key Vault Values'
 
-  # Add more steps as needed for further actions
+  # Add more steps as needed for further actions 
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(System.DefaultWorkingDirectory)'
+      contents: 'check.txt'  # Copy all files
+      targetFolder: '$(Build.ArtifactStagingDirectory)/staging'
+
+  # Publish files as artifacts
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/staging'
+      ArtifactName: 'my-artifact'
+      publishLocation: 'Container'
