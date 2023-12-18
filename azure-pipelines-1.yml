@@ -29,8 +29,9 @@ jobs:
       RunAsPreJob: false
 
   
-  # Fetch values from Azure Key Vault and set environment variables
   - script: |
       echo "APPNAME: $(AppName)"
       echo "PortNumber: $(PortNumber)"
+      echo "Original APPNAME: $env:APPNAME"
+      echo "Original PortNumber: $env:PortNumber"
     displayName: 'Display Variable Group Values'
