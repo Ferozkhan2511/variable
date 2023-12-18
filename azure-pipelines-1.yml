@@ -5,19 +5,14 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-#   - name: AppName
-#     value: 'varapp' # Leave it empty for now, we'll fetch it from Key Vault
-#   - name: PortNumber
-#     value: '0002' # Leave it empty for now, we'll fetch it from Key Vault
-  - name: PropertiesFilePath
-    value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
+  - group: KeyVaultVariables
 
 jobs:
-- job: BuildAndReplaceProperties
+- job: DisplayKeyVaultValues
   steps:
   - checkout: self
 
-  # Fetch values from Azure Key Vault
+  # Fetch values from Azure Key Vault and set environment variables
   - task: AzureKeyVault@2
     inputs:
       azureSubscription: 'Az'
@@ -26,42 +21,9 @@ jobs:
       RunAsPreJob: false
 
   - script: |
-      # Debug: Print current directory and contents of the directory
-      echo "Current Directory: $(pwd)"
-      echo "Contents of $(PropertiesFilePath):"
-      cat "$(PropertiesFilePath)"
+      # Debug: Print environment variables
+      echo "APPNAMEE: $AZURE_KEYVAULT_SECRET_APPNAMEE"
+      echo "PORTNUMBER: $AZURE_KEYVAULT_SECRET_PORTNUMBERR"
+    displayName: 'Display Key Vault Values'
 
-       # Debug: Print environment variables
-      echo "AppName: $AZURE_KEYVAULT_SECRET_AppName"
-      echo "PortNumber: $AZURE_KEYVAULT_SECRET_PortNumber"
-
-      # Replace values in application.properties using environment variables
-      sed -i "s/^spring.application.name=.*$/spring.application.name=$AppName/" "$(PropertiesFilePath)"
-      sed -i "s/^server.port=.*$/server.port=$PortNumber/" "$(PropertiesFilePath)"
-
-      # Debug: Print the modified contents of the file
-      echo "Modified Contents of $(PropertiesFilePath):"
-      cat "$(PropertiesFilePath)"
-    displayName: 'Replace values in application.properties'
-    env:
-      PropertiesFilePath: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
-
-  - task: Maven@4
-    inputs:
-      mavenPomFile: 'pom.xml'
-      options: '-DskipTests'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.17'
-      mavenVersionOption: 'Default'
-      mavenAuthenticateFeed: false
-      effectivePomSkip: false
-      sonarQubeRunAnalysis: false
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
-      ArtifactName: 'my-artifact'
-      publishLocation: 'Container'
-    displayName: 'Publish artifact'
+  # Add more steps as needed for further debugging or actions
