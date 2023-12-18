@@ -5,10 +5,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-#   - name: AppName
-#     value: '' # Leave it empty for now, we'll fetch it from Key Vault
-#   - name: PortNumber
-#     value: '' # Leave it empty for now, we'll fetch it from Key Vault
+  - name: AppName
+    value: 'varapp' # Leave it empty for now, we'll fetch it from Key Vault
+  - name: PortNumber
+    value: '0002' # Leave it empty for now, we'll fetch it from Key Vault
   - name: PropertiesFilePath
     value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
 
