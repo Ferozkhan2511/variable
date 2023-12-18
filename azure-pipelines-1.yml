@@ -19,7 +19,7 @@ jobs:
 
   - powershell: |
       # Display values directly from Azure Key Vault
-        echo $(PORTNUMBERR)
+        echo $(PORTNUMBERR) > check.txt
     displayName: 'Display Key Vault Values'
 
   # Add more steps as needed for further actions
