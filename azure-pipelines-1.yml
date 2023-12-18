@@ -36,6 +36,6 @@ jobs:
   #   displayName: 'Display Key Vault Values'
   - powershell: |
       # Display values directly from Azure Key Vault
-      Write-Host "Original APPNAME: $(AZURE_KEYVAULT_SECRET_AppName)"
+      Write-Host "Original APPNAME: $(AZURE_KEYVAULT_SECRET_APPNAME)"
       Write-Host "Original PortNumber: $(AZURE_KEYVAULT_SECRET_PORTNUMBER)"
     displayName: 'Display Key Vault Values'
