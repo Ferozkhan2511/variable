@@ -4,19 +4,8 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-# variables:
-#   - group: keyvault  # Replace with your variable group name
-
-# variables:
-#   - name: AppName
-#     value: 'varapp' # Leave it empty for now, we'll fetch it from Key Vault
-#   - name: PortNumber
-#     value: '0002' # Leave it empty for now, we'll fetch it from Key Vault
-#   - name: PropertiesFilePath
-#     value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
-
 jobs:
-- job: BuildAndReplaceProperties
+- job: DisplayKeyVaultValues
   steps:
   - checkout: self
 
@@ -28,14 +17,10 @@ jobs:
       SecretsFilter: '*'
       RunAsPreJob: false
 
-  
-  # - script: |
-  #     # Display the values directly from Azure Key Vault secrets
-  #     echo "$(AZURE_KEYVAULT_SECRET_AppName)"
-  #     echo "$(AZURE_KEYVAULT_SECRET_PortNumber)"
-  #   displayName: 'Display Key Vault Values'
   - powershell: |
       # Display values directly from Azure Key Vault
-      Write-Host "Original APPNAME: $(AZURE_KEYVAULT_SECRET_APPNAME)"
-      Write-Host "Original PortNumber: $(AZURE_KEYVAULT_SECRET_PORTNUMBER)"
+      Write-Host "Original APPNAME: $env:AZURE_KEYVAULT_SECRET_APPNAME"
+      Write-Host "Original PortNumber: $env:AZURE_KEYVAULT_SECRET_PORTNUMBER"
     displayName: 'Display Key Vault Values'
+
+  # Add more steps as needed for further actions
