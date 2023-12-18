@@ -35,7 +35,7 @@ jobs:
 
 
       # Replace values in application.properties using environment variables
-      sed -i "s/^spring.application.name=.*$/spring.application.name=$AppName/" "$(PropertiesFilePath)"
+      sed -i "s/^spring.application.name=.*$/spring.application.name=$AppName/" "$(System.DefaultWorkingDirectory)/src/main/resources/application.properties"
       sed -i "s/^server.port=.*$/server.port=$PortNumber/" "$(PropertiesFilePath)"
 
       # Debug: Print the modified contents of the file
