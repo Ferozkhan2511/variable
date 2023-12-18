@@ -5,14 +5,19 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  - group: KeyVaultVariables
+#   - name: AppName
+#     value: 'varapp' # Leave it empty for now, we'll fetch it from Key Vault
+#   - name: PortNumber
+#     value: '0002' # Leave it empty for now, we'll fetch it from Key Vault
+  - name: PropertiesFilePath
+    value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
 
 jobs:
-- job: DisplayKeyVaultValues
+- job: BuildAndReplaceProperties
   steps:
   - checkout: self
 
-  # Fetch values from Azure Key Vault and set environment variables
+  # Fetch values from Azure Key Vault
   - task: AzureKeyVault@2
     inputs:
       azureSubscription: 'Az'
@@ -20,10 +25,9 @@ jobs:
       SecretsFilter: '*'
       RunAsPreJob: false
 
+  
   - script: |
       # Debug: Print environment variables
       echo "APPNAMEE: $AZURE_KEYVAULT_SECRET_APPNAMEE"
       echo "PORTNUMBER: $AZURE_KEYVAULT_SECRET_PORTNUMBERR"
     displayName: 'Display Key Vault Values'
-
-  # Add more steps as needed for further debugging or actions
