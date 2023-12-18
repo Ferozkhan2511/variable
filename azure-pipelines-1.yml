@@ -4,13 +4,13 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-# variables:
+variables:
 #   - name: AppName
 #     value: '' # Leave it empty for now, we'll fetch it from Key Vault
 #   - name: PortNumber
 #     value: '' # Leave it empty for now, we'll fetch it from Key Vault
-#   - name: PropertiesFilePath
-#     value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
+  - name: PropertiesFilePath
+    value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
 
 jobs:
 - job: BuildAndReplaceProperties
