@@ -4,15 +4,20 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  - group: KeyVaultVariables
+# variables:
+#   - name: AppName
+#     value: 'varapp' # Leave it empty for now, we'll fetch it from Key Vault
+#   - name: PortNumber
+#     value: '0002' # Leave it empty for now, we'll fetch it from Key Vault
+#   - name: PropertiesFilePath
+#     value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
 
 jobs:
 - job: BuildAndReplaceProperties
   steps:
   - checkout: self
 
-  # Fetch values from Azure Key Vault and set environment variables
+  # Fetch values from Azure Key Vault
   - task: AzureKeyVault@2
     inputs:
       azureSubscription: 'Az'
@@ -26,7 +31,7 @@ jobs:
       echo "Contents of $(PropertiesFilePath):"
       cat $(PropertiesFilePath)
 
-      # Replace values in application.properties using environment variables
+      # Replace values in application.properties
       sed -i "s/^spring.application.name=.*$/spring.application.name=$APPNAME/" $(PropertiesFilePath)
       sed -i "s/^server.port=.*$/server.port=$PORTNUMBER/" $(PropertiesFilePath)
 
