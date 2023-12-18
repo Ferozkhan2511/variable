@@ -4,8 +4,8 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-# variables:
-#   - group: keyvault  # Replace with your variable group name
+variables:
+  - group: keyvault  # Replace with your variable group name
 
 # variables:
 #   - name: AppName
@@ -29,8 +29,13 @@ jobs:
       RunAsPreJob: false
 
   
+  # - script: |
+  #     # Display the values directly from Azure Key Vault secrets
+  #     echo "$(AZURE_KEYVAULT_SECRET_AppName)"
+  #     echo "$(AZURE_KEYVAULT_SECRET_PortNumber)"
+  #   displayName: 'Display Key Vault Values'
   - script: |
-      # Display the values directly from Azure Key Vault secrets
-      echo "$(AZURE_KEYVAULT_SECRET_AppName)"
-      echo "$(AZURE_KEYVAULT_SECRET_PortNumber)"
-    displayName: 'Display Key Vault Values'
+      # Display values from the variable group
+      echo "AppName: $(AppName)"
+      echo "PortNumber: $(PortNumber)"
+    displayName: 'Display Variable Group Values'
