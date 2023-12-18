@@ -5,13 +5,15 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-    - group: keyvault
-  # - name: AppName
-  #   value: '' # Leave it empty for now, we'll fetch it from Key Vault
-  # - name: PortNumber
-  #   value: '' # Leave it empty for now, we'll fetch it from Key Vault
-  # - name: PropertiesFilePath
-  #   value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
+  - group: keyvault  # Replace with your variable group name
+
+# variables:
+#   - name: AppName
+#     value: 'varapp' # Leave it empty for now, we'll fetch it from Key Vault
+#   - name: PortNumber
+#     value: '0002' # Leave it empty for now, we'll fetch it from Key Vault
+#   - name: PropertiesFilePath
+#     value: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
 
 jobs:
 - job: BuildAndReplaceProperties
@@ -26,41 +28,14 @@ jobs:
       SecretsFilter: '*'
       RunAsPreJob: false
 
-  - script: |
-      # Debug: Print current directory and contents of the directory
-      echo "Current Directory: $(pwd)"
-      echo "Contents of $(PropertiesFilePath):"
-      cat "$(PropertiesFilePath)"
-
-
-
-      # Replace values in application.properties using environment variables
-      sed -i "s/^spring.application.name=.*$/spring.application.name=$AppName/" "$(System.DefaultWorkingDirectory)/src/main/resources/application.properties"
-      sed -i "s/^server.port=.*$/server.port=$PortNumber/" "$(PropertiesFilePath)"
-
-      # Debug: Print the modified contents of the file
-      echo "Modified Contents of $(PropertiesFilePath):"
-      cat "$(PropertiesFilePath)"
-    displayName: 'Replace values in application.properties'
-    env:
-      PropertiesFilePath: '$(System.DefaultWorkingDirectory)/src/main/resources/application.properties'
-
-  - task: Maven@4
-    inputs:
-      mavenPomFile: 'pom.xml'
-      options: '-DskipTests'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.17'
-      mavenVersionOption: 'Default'
-      mavenAuthenticateFeed: false
-      effectivePomSkip: false
-      sonarQubeRunAnalysis: false
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
-      ArtifactName: 'my-artifact'
-      publishLocation: 'Container'
-    displayName: 'Publish artifact'
+  
+  # - script: |
+  #     # Display the values directly from Azure Key Vault secrets
+  #     echo "$(AZURE_KEYVAULT_SECRET_AppName)"
+  #     echo "$(AZURE_KEYVAULT_SECRET_PortNumber)"
+  #   displayName: 'Display Key Vault Values'
+  - powershell: |
+      # Display values directly from Azure Key Vault
+      Write-Host "Original APPNAME: $(AZURE_KEYVAULT_SECRET_AppName)"
+      Write-Host "Original PortNumber: $(AZURE_KEYVAULT_SECRET_PORTNUMBER)"
+    displayName: 'Display Key Vault Values'
