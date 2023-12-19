@@ -57,10 +57,10 @@ jobs:
       publishLocation: 'Container'
     displayName: 'Publish artifact'
 
-- job: BuildDockerImage
-  dependsOn: BuildAndPublish
-  steps:
-  - checkout: self
+# - job: BuildDockerImage
+#   dependsOn: BuildAndPublish
+#   steps:
+#   - checkout: self
 
   # Download the artifact published in the previous job
   - download: current
