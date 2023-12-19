@@ -56,3 +56,41 @@ jobs:
       ArtifactName: 'my-artifact'
       publishLocation: 'Container'
     displayName: 'Publish artifact'
+
+- job: BuildDockerImage
+  dependsOn: BuildAndPublish
+  steps:
+  - checkout: self
+
+  # Download the artifact published in the previous job
+  - download: current
+    artifact: 'my-artifact'
+
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'docker'
+      repository: 'Feroz2511'
+      command: 'buildAndPush'
+      Dockerfile: '**/Dockerfile'
+
+
+
+#  # Build the Docker image
+#   - task: Docker@2
+#     inputs:
+#       command: 'build'
+#       dockerfile: '$(DockerfilePath)'
+#       tags: '$(DockerImageName):$(Build.BuildId)'
+#       buildContext: '$(Pipeline.Workspace)'
+#       arguments: '--build-arg SPRING_APPLICATION_NAME=$(AppName) --build-arg SERVER_PORT=$(PortNumber)'
+#     displayName: 'Build Docker Image'
+
+#   # Push the Docker image to a container registry (replace 'your-container-registry' with your actual registry)
+#   - task: Docker@2
+#     inputs:
+#       command: 'push'
+#       containerRegistry: 'your-container-registry'
+#       repository: '$(DockerImageName)'
+#       tags: '$(Build.BuildId)'
+#     displayName: 'Push Docker Image'
