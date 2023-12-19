@@ -91,7 +91,7 @@ jobs:
   - task: Docker@2
     inputs:
       command: 'push'
-      containerRegistry: 'Feroz2511'
+      containerRegistry: 'docker'
       repository: '$(envcheck)'
       tags: '$(Build.BuildId)'
     displayName: 'Push Docker Image'
